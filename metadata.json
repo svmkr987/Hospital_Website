@@ -1,0 +1,8 @@
+{
+  "name": "Shubham Family & Diabetic Clinic",
+  "description": "Professional website for Shubham Family & Diabetic Clinic featuring Dr. Samskar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
