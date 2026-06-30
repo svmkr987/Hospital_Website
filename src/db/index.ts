@@ -4,6 +4,12 @@ const { Pool } = pkg;
 import * as schema from './schema.ts';
 
 export const createPool = () => {
+  if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+    return new Pool({
+      connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL,
+      connectionTimeoutMillis: 15000,
+    });
+  }
   return new Pool({
     host: process.env.SQL_HOST,
     user: process.env.SQL_USER,

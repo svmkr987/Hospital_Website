@@ -118,8 +118,9 @@ export default function BookAppointment() {
       if (res.ok) {
         setStatus('success');
       } else {
+        const errData = await res.json().catch(() => ({}));
         setStatus('error');
-        setErrorMsg('Failed to submit request. Please try again.');
+        setErrorMsg(`Failed to submit request. ${errData.error || errData.details || res.statusText}`);
       }
     } catch {
       setStatus('error');
