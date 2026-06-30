@@ -4,5 +4,5 @@
 
 export const serverConfig = {
   // Database Configuration
-  dbUrl: process.env.DATABASE_URL || process.env.POSTGRES_URL || "postgresql://postgres.lrhzovdppjuhehxhkiwe:Ursmanu_987@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres",
+  dbUrl: process.env.DATABASE_POSTGRES_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL || "",
 };
