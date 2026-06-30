@@ -1,8 +1,8 @@
 import express from 'express';
-import { requireAuth, requireAdmin, AuthRequest } from './middleware/auth.ts';
-import { db } from './db/index.ts';
-import { hospital_appointments, hospital_enquiries, hospital_users } from './db/schema.ts';
-import { getOrCreateUser } from './db/users.ts';
+import { requireAuth, requireAdmin, AuthRequest } from './middleware/auth.js';
+import { db } from './db/index.js';
+import { hospital_appointments, hospital_enquiries, hospital_users } from './db/schema.js';
+import { getOrCreateUser } from './db/users.js';
 import { eq, desc, lt } from 'drizzle-orm';
 
 const apiRouter = express.Router();

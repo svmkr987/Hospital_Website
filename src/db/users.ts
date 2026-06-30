@@ -1,5 +1,5 @@
-import { db } from './index.ts';
-import { hospital_users } from './schema.ts';
+import { db } from './index.js';
+import { hospital_users } from './schema.js';
 
 export async function getOrCreateUser(uid: string, email: string) {
   const role = email === 'svmanoj1220@gmail.com' ? 'admin' : 'patient';

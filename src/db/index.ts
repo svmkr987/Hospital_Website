@@ -1,8 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pkg from 'pg';
 const { Pool } = pkg;
-import * as schema from './schema.ts';
-import { serverConfig } from '../serverConfig.ts';
+import * as schema from './schema.js';
+import { serverConfig } from '../serverConfig.js';
 
 export const createPool = () => {
   const connectionString = serverConfig.dbUrl;
