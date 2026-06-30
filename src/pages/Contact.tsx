@@ -55,7 +55,7 @@ export default function Contact() {
                   <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-sage/50 bg-mint/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green/20 focus:border-green transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate mb-2">Patient Phone Num</label>
+                  <label className="block text-sm font-medium text-slate mb-2">Phone Number</label>
                   <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-4 py-3 rounded-xl border border-sage/50 bg-mint/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green/20 focus:border-green transition-all" />
                 </div>
               </div>
