@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, CalendarDays, CheckCircle, Clock } from 'lucide-react';
+import { appConfig } from '../config.ts';
 
 export default function BookAppointment() {
   const [formData, setFormData] = useState({ patientName: '', email: '', phone: '', reason: '' });
@@ -155,7 +156,7 @@ export default function BookAppointment() {
                     </div>
                     <div>
                       <h1 className="text-2xl md:text-3xl font-display font-bold text-slate">In-Clinic Consultation</h1>
-                      <p className="text-slate/70 text-sm mt-1">Dr. Samskar . | Shubham Clinic, Balagere</p>
+                      <p className="text-slate/70 text-sm mt-1">{appConfig.doctorName} | {appConfig.clinicName}</p>
                     </div>
                   </div>
                   <div className="text-sm text-slate/60 text-left md:text-right">

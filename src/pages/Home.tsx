@@ -16,10 +16,11 @@ import {
   Star,
   Quote
 } from 'lucide-react';
+import { appConfig } from '../config.ts';
 
 export default function Home() {
-  const phoneNumber = "09535564505";
-  const mapLink = "https://www.google.com/maps/place/Dr.+Samskar+.+%7C+General+Physician+%7C+Diabetologist+Shubham+Family+%26+Diabetic+Clinic/@12.9412041,77.7250995,15.39z/data=!4m6!3m5!1s0x3bae13d1ecfc01d1:0x12228ad274340fc!8m2!3d12.9396672!4d77.7228844!16s%2Fg%2F11fhr1qnm2?hl=en&entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D";
+  const phoneNumber = appConfig.phone;
+  const mapLink = appConfig.mapLink;
   
   const checkIsOpen = () => {
     const now = new Date();
@@ -64,11 +65,11 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <a href={`tel:${phoneNumber}`} className="flex items-center gap-1.5 hover:text-sage transition-colors">
               <Phone className="w-4 h-4" />
-              <span>+91 95355 64505</span>
+              <span>{appConfig.phoneDisplay}</span>
             </a>
             <div className="hidden sm:flex items-center gap-1.5">
               <Clock className="w-4 h-4" />
-              <span>Mon-Sat: 8:15 AM - 9 PM | Sun: 10 AM - 4 PM</span>
+              <span>{appConfig.timingsDisplay}</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -83,7 +84,7 @@ export default function Home() {
             )}
             <a href={mapLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-sage transition-colors">
               <MapPin className="w-4 h-4" />
-              <span className="truncate max-w-[200px] sm:max-w-none">Balagere, Bengaluru</span>
+              <span className="truncate max-w-[200px] sm:max-w-none">{appConfig.address}</span>
             </a>
           </div>
         </div>
@@ -99,7 +100,7 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="font-sans tracking-tight font-bold text-lg sm:text-xl text-slate leading-tight">
-                  Shubham Clinic
+                  {appConfig.clinicName}
                 </h1>
               </div>
             </div>
@@ -145,10 +146,10 @@ export default function Home() {
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display leading-[1.1] text-slate mb-6">
                 Compassionate Care by <br/>
-                <span className="text-green">Dr. Samskar</span>
+                <span className="text-green">{appConfig.doctorName}</span>
               </h1>
               <p className="text-lg text-slate/80 mb-8 leading-relaxed max-w-md">
-                Providing specialized diabetology and general physician services with an in-house pharmacy and diagnostic laboratory in Balagere, Bengaluru.
+                {appConfig.heroDescription}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -182,7 +183,7 @@ export default function Home() {
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-slate/10 border border-white/50 aspect-[4/3] lg:aspect-square max-w-[500px] w-full bg-white flex items-center justify-center">
                  <img 
-                    src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=2080&auto=format&fit=crop" 
+                    src={appConfig.heroImage} 
                     alt="Doctor Consultation" 
                     className="object-cover w-full h-full"
                  />
@@ -193,8 +194,8 @@ export default function Home() {
                       <Award className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="font-bold text-slate font-display">Dr. Samskar .</p>
-                      <p className="text-sm text-slate/80">General Physician & Diabetologist</p>
+                      <p className="font-bold text-slate font-display">{appConfig.doctorName}</p>
+                      <p className="text-sm text-slate/80">{appConfig.doctorTitle}</p>
                     </div>
                  </div>
               </div>
@@ -220,10 +221,10 @@ export default function Home() {
                <Stethoscope className="w-16 h-16 text-green opacity-80" />
             </div>
             <div className="text-center md:text-left flex-1">
-              <h3 className="text-2xl font-bold font-display text-slate mb-2">Dr. Samskar .</h3>
-              <p className="text-green font-medium mb-4 text-lg">General Physician | Diabetologist</p>
+              <h3 className="text-2xl font-bold font-display text-slate mb-2">{appConfig.doctorName}</h3>
+              <p className="text-green font-medium mb-4 text-lg">{appConfig.doctorSubTitle}</p>
               <p className="text-slate/80 mb-6 leading-relaxed">
-                Expert care for diabetes management, general illnesses, and preventative health. At Shubham Clinic, we prioritize patient well-being through accurate diagnosis, personalized treatment plans, and continuous support.
+                Expert care for diabetes management, general illnesses, and preventative health. At {appConfig.clinicName}, we prioritize patient well-being through accurate diagnosis, personalized treatment plans, and continuous support.
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-3">
                 <span className="px-4 py-1.5 bg-mint text-slate rounded-full text-xs font-bold tracking-wider uppercase border border-sage/30">Diabetes Management</span>
@@ -340,11 +341,11 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-white h-20 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-12 border-t border-sage text-[11px] font-bold uppercase tracking-widest text-slate">
-        <div>© {new Date().getFullYear()} Shubham Clinic</div>
+        <div>© {new Date().getFullYear()} {appConfig.clinicName}</div>
         <div className="hidden md:flex space-x-6">
-          <span>Internal Medicine</span>
-          <span>Pharmacy</span>
-          <span>Lab Tests</span>
+          {appConfig.footerTags.map((tag, i) => (
+            <span key={i}>{tag}</span>
+          ))}
         </div>
         <div className="flex items-center space-x-2">
           <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-green animate-pulse' : 'bg-red-500'}`}></div>

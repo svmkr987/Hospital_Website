@@ -5,15 +5,15 @@ import { ShieldCheck, LogOut, ArrowLeft, Calendar, MessageSquare } from 'lucide-
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'appointments' | 'inquiries'>('appointments');
+  const [activeTab, setActiveTab] = useState<'appointments' | 'enquiries'>('appointments');
   
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const [appointments, setAppointments] = useState<any[]>([]);
-  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [enquiries, setEnquiries] = useState<any[]>([]);
   const [error, setError] = useState('');
-  const [inquiryToDelete, setInquiryToDelete] = useState<number | null>(null);
+  const [enquiryToDelete, setEnquiryToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -33,9 +33,9 @@ export default function Admin() {
       const appData = await appRes.json();
       setAppointments(appData);
 
-      const inqRes = await fetch('/api/admin/inquiries', { headers });
+      const inqRes = await fetch('/api/admin/enquiries', { headers });
       if (inqRes.ok) {
-        setInquiries(await inqRes.json());
+        setEnquiries(await inqRes.json());
       }
     } catch (err: any) {
       setError(err.message);
@@ -92,23 +92,23 @@ export default function Admin() {
     }
   };
 
-  const confirmDeleteInquiry = async () => {
-    if (inquiryToDelete === null) return;
+  const confirmDeleteEnquiry = async () => {
+    if (enquiryToDelete === null) return;
     
     const token = localStorage.getItem('adminToken');
     if (!token) return;
     try {
-      const res = await fetch(`/api/admin/inquiries/${inquiryToDelete}`, {
+      const res = await fetch(`/api/admin/enquiries/${enquiryToDelete}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
       if (res.ok) {
-        setInquiries(inqs => inqs.filter(i => i.id !== inquiryToDelete));
-        setInquiryToDelete(null);
+        setEnquiries(inqs => inqs.filter(i => i.id !== enquiryToDelete));
+        setEnquiryToDelete(null);
       } else {
-        console.error('Failed to delete inquiry');
+        console.error('Failed to delete enquiry');
       }
     } catch (err) {
       console.error(err);
@@ -194,8 +194,8 @@ export default function Admin() {
                 <Calendar className="w-4 h-4" /> Appointments
               </button>
               <button 
-                onClick={() => setActiveTab('inquiries')}
-                className={`flex-1 py-4 px-6 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${activeTab === 'inquiries' ? 'bg-mint text-green border-b-2 border-green' : 'text-slate/60 hover:bg-slate/5'}`}
+                onClick={() => setActiveTab('enquiries')}
+                className={`flex-1 py-4 px-6 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${activeTab === 'enquiries' ? 'bg-mint text-green border-b-2 border-green' : 'text-slate/60 hover:bg-slate/5'}`}
               >
                 <MessageSquare className="w-4 h-4" /> Enquiries
               </button>
@@ -258,7 +258,7 @@ export default function Admin() {
                 </div>
               )}
 
-              {activeTab === 'inquiries' && (
+              {activeTab === 'enquiries' && (
                 <div className="space-y-4">
                   <div className="bg-yellow-50 text-yellow-800 p-3 rounded-lg border border-yellow-200 text-sm flex items-center gap-2">
                     <span className="font-bold uppercase tracking-wider text-xs bg-yellow-200 px-2 py-0.5 rounded text-yellow-900">Note</span> 
@@ -275,9 +275,9 @@ export default function Admin() {
                     </tr>
                   </thead>
                   <tbody>
-                    {inquiries.length === 0 ? (
+                    {enquiries.length === 0 ? (
                       <tr><td colSpan={5} className="py-8 text-center text-slate/50">No enquiries found.</td></tr>
-                    ) : inquiries.map(inq => (
+                    ) : enquiries.map(inq => (
                       <tr key={inq.id} className="border-b border-sage/30 hover:bg-mint/30">
                         <td className="py-4 px-4 text-sm text-slate/80">{new Date(inq.createdAt).toLocaleDateString()}</td>
                         <td className="py-4 px-4">
@@ -288,7 +288,7 @@ export default function Admin() {
                         <td className="py-4 px-4 text-sm text-slate/80 max-w-xs truncate" title={inq.message}>{inq.message}</td>
                         <td className="py-4 px-4">
                           <button
-                            onClick={() => setInquiryToDelete(inq.id)}
+                            onClick={() => setEnquiryToDelete(inq.id)}
                             className="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-1 rounded-lg border border-red-200 hover:bg-red-50 transition-colors"
                           >
                             Delete
@@ -304,20 +304,20 @@ export default function Admin() {
           </div>
         )}
       </div>
-      {inquiryToDelete !== null && (
+      {enquiryToDelete !== null && (
         <div className="fixed inset-0 bg-slate/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-lg border border-sage text-center">
             <h3 className="text-xl font-bold text-slate mb-4">Confirm Deletion</h3>
             <p className="text-slate/80 mb-8">Are you sure you want to delete this enquiry? This action cannot be undone.</p>
             <div className="flex gap-4 justify-center">
               <button
-                onClick={() => setInquiryToDelete(null)}
+                onClick={() => setEnquiryToDelete(null)}
                 className="px-6 py-2 rounded-full border border-sage text-slate font-medium hover:bg-mint transition-colors"
               >
                 Cancel
               </button>
               <button
-                onClick={confirmDeleteInquiry}
+                onClick={confirmDeleteEnquiry}
                 className="px-6 py-2 rounded-full bg-red-500 text-white font-medium hover:bg-red-600 transition-colors"
               >
                 Delete

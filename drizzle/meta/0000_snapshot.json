@@ -1,11 +1,11 @@
 {
-  "id": "6633f70e-bd52-4cab-b84d-995858f35e6b",
+  "id": "27d09929-61aa-4825-a15d-6beeb77d745f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.appointments": {
-      "name": "appointments",
+    "public.hospital_appointments": {
+      "name": "hospital_appointments",
       "schema": "",
       "columns": {
         "id": {
@@ -73,10 +73,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "appointments_user_id_users_id_fk": {
-          "name": "appointments_user_id_users_id_fk",
-          "tableFrom": "appointments",
-          "tableTo": "users",
+        "hospital_appointments_user_id_hospital_users_id_fk": {
+          "name": "hospital_appointments_user_id_hospital_users_id_fk",
+          "tableFrom": "hospital_appointments",
+          "tableTo": "hospital_users",
           "columnsFrom": [
             "user_id"
           ],
@@ -93,8 +93,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.inquiries": {
-      "name": "inquiries",
+    "public.hospital_enquiries": {
+      "name": "hospital_enquiries",
       "schema": "",
       "columns": {
         "id": {
@@ -150,8 +150,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.hospital_users": {
+      "name": "hospital_users",
       "schema": "",
       "columns": {
         "id": {
@@ -191,8 +191,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_uid_unique": {
-          "name": "users_uid_unique",
+        "hospital_users_uid_unique": {
+          "name": "hospital_users_uid_unique",
           "nullsNotDistinct": false,
           "columns": [
             "uid"

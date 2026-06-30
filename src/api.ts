@@ -1,7 +1,7 @@
 import express from 'express';
 import { requireAuth, requireAdmin, AuthRequest } from './middleware/auth.ts';
 import { db } from './db/index.ts';
-import { appointments, inquiries, users } from './db/schema.ts';
+import { hospital_appointments, hospital_enquiries, hospital_users } from './db/schema.ts';
 import { getOrCreateUser } from './db/users.ts';
 import { eq, desc, lt } from 'drizzle-orm';
 
@@ -17,12 +17,12 @@ apiRouter.post('/admin/login', async (req, res) => {
       fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
       const dateString = fiveDaysAgo.toISOString().split('T')[0];
       
-      await db.delete(appointments).where(lt(appointments.date, dateString));
+      await db.delete(hospital_appointments).where(lt(hospital_appointments.date, dateString));
 
-      // Clean up inquiries older than 10 days
+      // Clean up enquiries older than 10 days
       const tenDaysAgo = new Date();
       tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
-      await db.delete(inquiries).where(lt(inquiries.createdAt, tenDaysAgo));
+      await db.delete(hospital_enquiries).where(lt(hospital_enquiries.createdAt, tenDaysAgo));
     } catch (err) {
       console.error('Failed to cleanup old appointments:', err);
     }
@@ -33,14 +33,14 @@ apiRouter.post('/admin/login', async (req, res) => {
   }
 });
 
-apiRouter.post('/inquiries', async (req, res) => {
+apiRouter.post('/enquiries', async (req, res) => {
   try {
     const { name, phone, subject, message } = req.body;
-    const result = await db.insert(inquiries).values({ name, phone, subject, message }).returning();
+    const result = await db.insert(hospital_enquiries).values({ name, phone, subject, message }).returning();
     res.json(result[0]);
   } catch (error: any) {
-    console.error('Failed to submit inquiry:', error);
-    res.status(500).json({ error: 'Failed to submit inquiry', details: error.message });
+    console.error('Failed to submit enquiry:', error);
+    res.status(500).json({ error: 'Failed to submit enquiry', details: error.message });
   }
 });
 
@@ -51,9 +51,9 @@ apiRouter.get('/appointments/booked', async (req, res) => {
       return res.status(400).json({ error: 'Date is required' });
     }
     
-    const apps = await db.select({ time: appointments.time })
-      .from(appointments)
-      .where(eq(appointments.date, date));
+    const apps = await db.select({ time: hospital_appointments.time })
+      .from(hospital_appointments)
+      .where(eq(hospital_appointments.date, date));
       
     res.json(apps.map(a => a.time));
   } catch (error: any) {
@@ -65,7 +65,7 @@ apiRouter.get('/appointments/booked', async (req, res) => {
 apiRouter.post('/appointments/public', async (req, res) => {
   try {
     const { patientName, email, phone, date, time, reason } = req.body;
-    const result = await db.insert(appointments).values({
+    const result = await db.insert(hospital_appointments).values({
       patientName,
       email,
       phone,
@@ -94,7 +94,7 @@ apiRouter.post('/auth/sync', requireAuth, async (req: AuthRequest, res) => {
 apiRouter.get('/appointments/my', requireAuth, async (req: AuthRequest, res) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
-    const myApps = await db.select().from(appointments).where(eq(appointments.email, req.user.email || '')).orderBy(desc(appointments.createdAt));
+    const myApps = await db.select().from(hospital_appointments).where(eq(hospital_appointments.email, req.user.email || '')).orderBy(desc(hospital_appointments.createdAt));
     res.json(myApps);
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to fetch appointments', details: error.message });
@@ -104,19 +104,19 @@ apiRouter.get('/appointments/my', requireAuth, async (req: AuthRequest, res) => 
 // Admin APIs
 apiRouter.get('/admin/appointments', requireAdmin, async (req: AuthRequest, res) => {
   try {
-    const apps = await db.select().from(appointments).orderBy(desc(appointments.createdAt));
+    const apps = await db.select().from(hospital_appointments).orderBy(desc(hospital_appointments.createdAt));
     res.json(apps);
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to fetch appointments', details: error.message });
   }
 });
 
-apiRouter.get('/admin/inquiries', requireAdmin, async (req: AuthRequest, res) => {
+apiRouter.get('/admin/enquiries', requireAdmin, async (req: AuthRequest, res) => {
   try {
-    const inqs = await db.select().from(inquiries).orderBy(desc(inquiries.createdAt));
+    const inqs = await db.select().from(hospital_enquiries).orderBy(desc(hospital_enquiries.createdAt));
     res.json(inqs);
   } catch (error: any) {
-    res.status(500).json({ error: 'Failed to fetch inquiries', details: error.message });
+    res.status(500).json({ error: 'Failed to fetch enquiries', details: error.message });
   }
 });
 
@@ -124,20 +124,20 @@ apiRouter.patch('/admin/appointments/:id', requireAdmin, async (req: AuthRequest
   try {
     const id = parseInt(req.params.id);
     const { status } = req.body;
-    const result = await db.update(appointments).set({ status }).where(eq(appointments.id, id)).returning();
+    const result = await db.update(hospital_appointments).set({ status }).where(eq(hospital_appointments.id, id)).returning();
     res.json(result[0]);
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to update appointment', details: error.message });
   }
 });
 
-apiRouter.delete('/admin/inquiries/:id', requireAdmin, async (req: AuthRequest, res) => {
+apiRouter.delete('/admin/enquiries/:id', requireAdmin, async (req: AuthRequest, res) => {
   try {
     const id = parseInt(req.params.id);
-    await db.delete(inquiries).where(eq(inquiries.id, id));
+    await db.delete(hospital_enquiries).where(eq(hospital_enquiries.id, id));
     res.json({ success: true });
   } catch (error: any) {
-    res.status(500).json({ error: 'Failed to delete inquiry', details: error.message });
+    res.status(500).json({ error: 'Failed to delete enquiry', details: error.message });
   }
 });
 

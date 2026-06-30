@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { adminAuth } from '../lib/firebase-admin.ts';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { db } from '../db/index.ts';
-import { users } from '../db/schema.ts';
-import { eq } from 'drizzle-orm';
 
 export interface AuthRequest extends Request {
   user?: DecodedIdToken;

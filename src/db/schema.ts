@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm';
 import { integer, pgTable, serial, text, timestamp, varchar, boolean } from 'drizzle-orm/pg-core';
 
 // Users table for Firebase Auth mapping and roles
-export const users = pgTable('users', {
+export const hospital_users = pgTable('hospital_users', {
   id: serial('id').primaryKey(),
   uid: text('uid').notNull().unique(), // Firebase Auth UID
   email: text('email').notNull(),
@@ -11,9 +11,9 @@ export const users = pgTable('users', {
 });
 
 // Appointments table
-export const appointments = pgTable('appointments', {
+export const hospital_appointments = pgTable('hospital_appointments', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id), // Optional, if booked by logged-in user
+  userId: integer('user_id').references(() => hospital_users.id), // Optional, if booked by logged-in user
   patientName: text('patient_name').notNull(),
   email: text('email').notNull(),
   phone: varchar('phone', { length: 20 }).notNull(),
@@ -24,8 +24,8 @@ export const appointments = pgTable('appointments', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-// Inquiries table (Contact form)
-export const inquiries = pgTable('inquiries', {
+// Enquiries table (Contact form)
+export const hospital_enquiries = pgTable('hospital_enquiries', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   phone: varchar('phone', { length: 20 }).notNull(),
@@ -35,13 +35,13 @@ export const inquiries = pgTable('inquiries', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  appointments: many(appointments),
+export const usersRelations = relations(hospital_users, ({ many }) => ({
+  appointments: many(hospital_appointments),
 }));
 
-export const appointmentsRelations = relations(appointments, ({ one }) => ({
-  user: one(users, {
-    fields: [appointments.userId],
-    references: [users.id],
+export const appointmentsRelations = relations(hospital_appointments, ({ one }) => ({
+  user: one(hospital_users, {
+    fields: [hospital_appointments.userId],
+    references: [hospital_users.id],
   }),
 }));
