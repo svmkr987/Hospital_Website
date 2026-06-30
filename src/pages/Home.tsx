@@ -98,7 +98,7 @@ export default function Home() {
                 <Hospital className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="font-sans tracking-tight font-bold text-2xl sm:text-3xl text-slate leading-tight">
+                <h1 className="font-sans tracking-tight font-bold text-lg sm:text-xl text-slate leading-tight">
                   Shubham Clinic
                 </h1>
               </div>
