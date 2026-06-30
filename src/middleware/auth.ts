@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { adminAuth } from '../lib/firebase-admin.js';
-import { DecodedIdToken } from 'firebase-admin/auth';
 
 export interface AuthRequest extends Request {
-  user?: DecodedIdToken;
+  user?: any;
 }
 
 export const requireAuth = async (
@@ -16,15 +14,14 @@ export const requireAuth = async (
     return res.status(401).json({ error: 'Unauthorized: Missing token' });
   }
 
+  // Simple mock token validation since we removed Firebase
   const token = authHeader.split('Bearer ')[1];
-  try {
-    const decodedToken = await adminAuth.verifyIdToken(token);
-    req.user = decodedToken;
-    next();
-  } catch (error) {
-    console.error('Error verifying Firebase ID token:', error);
-    return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+  if (token === 'simple-admin-token-123') {
+    req.user = { uid: 'admin', email: 'admin@hospital.com' };
+    return next();
   }
+  
+  return res.status(401).json({ error: 'Unauthorized: Invalid token' });
 };
 
 export const requireAdmin = async (
